@@ -33,3 +33,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Hibernate Auto-generated SQL Files ###
+create-*.sql
