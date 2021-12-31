@@ -1,0 +1,22 @@
+server:
+  port: 8010
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: false
+    properties:
+      javax:
+        persistence:
+          schema-generation:
+            scripts:
+              action: create
+              create-target: create-portal.sql
+              create-source: metadata
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/SERVICE_PORTAL
+    username: root
+    password:
+
+
+
