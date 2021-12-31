@@ -16,6 +16,7 @@
   <description>service-feedback</description>
   <properties>
     <java.version>11</java.version>
+    <spring-cloud.version>2021.0.0</spring-cloud.version>
   </properties>
   <dependencies>
     <dependency>
@@ -27,6 +28,15 @@
       <groupId>com.service</groupId>
       <artifactId>service-library</artifactId>
       <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -57,6 +67,17 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <groupId>org.springframework.cloud</groupId>
+        <scope>import</scope>
+        <type>pom</type>
+        <version>${spring-cloud.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>
