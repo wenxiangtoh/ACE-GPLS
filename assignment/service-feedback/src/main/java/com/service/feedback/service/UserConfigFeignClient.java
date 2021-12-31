@@ -1,6 +1,6 @@
 package com.service.feedback.service;
 
-import com.service.library.repository.entity.config.FeignConfig;
+import com.service.library.repository.config.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 

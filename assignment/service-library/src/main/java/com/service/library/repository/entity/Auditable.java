@@ -33,22 +33,18 @@ public abstract class Auditable implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  /** creation time of contactNumber */
   @Column(nullable = false, columnDefinition = "TIMESTAMP")
   @CreatedDate
   private LocalDateTime createdAt;
 
-  /** contactNumber's creating user id */
   @Column(nullable = false)
   @CreatedBy
   private long createdByUserId;
 
-  /** update time of contactNumber */
   @Column(nullable = false, columnDefinition = "TIMESTAMP")
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
-  /** contactNumber's updating user id */
   @Column(nullable = false)
   @LastModifiedBy
   private long updatedByUserId;

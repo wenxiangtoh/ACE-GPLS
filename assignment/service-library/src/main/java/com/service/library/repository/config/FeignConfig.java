@@ -1,4 +1,4 @@
-package com.service.library.repository.entity.config;
+package com.service.library.repository.config;
 
 import feign.Logger;
 import feign.RequestInterceptor;
