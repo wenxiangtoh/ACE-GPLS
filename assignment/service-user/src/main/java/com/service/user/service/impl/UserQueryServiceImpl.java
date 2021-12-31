@@ -21,6 +21,8 @@ public class UserQueryServiceImpl implements UserQueryService {
 
   @Autowired private UserRepository userRepository;
 
+  /** {@inheritDoc} */
+  @Override
   public UserInfoModel findUserByNameAndEmail(SearchUserModel searchUserModel) {
     var name = searchUserModel.getName();
     var email = searchUserModel.getEmail();

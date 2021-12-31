@@ -1,4 +1,4 @@
-package com.service.user.service.model;
+package com.service.library.service.model;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;

@@ -1,5 +1,7 @@
 package com.service.user.service.impl;
 
+import com.service.library.service.model.ContactNumberModel;
+import com.service.library.service.model.UserModel;
 import com.service.user.Constants;
 import com.service.user.repository.AgencyRepository;
 import com.service.user.repository.ContactNumberRepository;
@@ -8,8 +10,6 @@ import com.service.user.repository.entity.Agency;
 import com.service.user.repository.entity.ContactNumber;
 import com.service.user.repository.entity.User;
 import com.service.user.service.UserCommandService;
-import com.service.user.service.model.ContactNumberModel;
-import com.service.user.service.model.UserModel;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;

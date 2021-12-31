@@ -1,6 +1,6 @@
 package com.service.user.service;
 
-import com.service.user.service.model.UserModel;
+import com.service.library.service.model.UserModel;
 
 public interface UserCommandService {
 

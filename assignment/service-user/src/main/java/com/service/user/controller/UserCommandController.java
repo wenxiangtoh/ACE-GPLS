@@ -1,7 +1,7 @@
 package com.service.user.controller;
 
+import com.service.library.service.model.UserModel;
 import com.service.user.service.UserCommandService;
-import com.service.user.service.model.UserModel;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
