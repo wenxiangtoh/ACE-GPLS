@@ -1,13 +1,13 @@
 package com.service.user.service;
 
-import com.service.user.service.model.CreateUserModel;
+import com.service.user.service.model.UserModel;
 
 public interface UserCommandService {
 
   /**
    * Method to create user
    *
-   * @param createUserModel create user model containing user informations
+   * @param userModel user model containing user information
    */
-  void createUser(CreateUserModel createUserModel);
+  void createUser(UserModel userModel);
 }

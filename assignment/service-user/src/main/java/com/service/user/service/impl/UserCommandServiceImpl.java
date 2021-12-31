@@ -9,7 +9,7 @@ import com.service.user.repository.entity.ContactNumber;
 import com.service.user.repository.entity.User;
 import com.service.user.service.UserCommandService;
 import com.service.user.service.model.ContactNumberModel;
-import com.service.user.service.model.CreateUserModel;
+import com.service.user.service.model.UserModel;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,7 +33,7 @@ public class UserCommandServiceImpl implements UserCommandService {
   /** {@inheritDoc} */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void createUser(CreateUserModel createUserModel) {
+  public void createUser(UserModel createUserModel) {
     var agencyUuid = createUserModel.getAgencyUuid();
     var agency = checkAgencyExistsByUuid(agencyUuid);
     var userUuid = UUID.randomUUID().toString();

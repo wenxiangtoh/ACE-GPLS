@@ -1,7 +1,7 @@
 package com.service.user.controller;
 
 import com.service.user.service.UserCommandService;
-import com.service.user.service.model.CreateUserModel;
+import com.service.user.service.model.UserModel;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -15,8 +15,13 @@ public class UserCommandController {
 
   @Autowired private UserCommandService userCommandService;
 
+  /**
+   * Method to create user
+   *
+   * @param userModel user model containing user information
+   */
   @PostMapping("/interior/users")
-  public void createUser(@RequestBody @Valid CreateUserModel createUserModel) {
-    userCommandService.createUser(createUserModel);
+  public void createUser(@RequestBody @Valid UserModel userModel) {
+    userCommandService.createUser(userModel);
   }
 }
