@@ -12,4 +12,6 @@ public class Constants {
       "The following user could not be found. name = {}, email = {}";
   public static final String FEEDBACK_NOT_FOUND =
       "There are no feedback found. email = {}, countryCode = {}, number = {}";
+  public static final String POSITIVE = "positive";
+  public static final String NEGATIVE = "negative";
 }

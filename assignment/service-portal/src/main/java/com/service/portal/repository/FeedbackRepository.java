@@ -1,5 +1,6 @@
 package com.service.portal.repository;
 
+import com.service.portal.enumeration.FeedbackStatus;
 import com.service.portal.repository.entity.Feedback;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,12 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
       "FROM Feedback fb, User u, ContactNumber cn WHERE fb.userId = u.id AND u.contactNumber.id = cn.id AND u.email = ?1 AND cn.countryCode = ?2 AND cn.number = ?3")
   List<Feedback> findFeedbacksByEmailAndContactNumber(
       String email, long countryCode, String number);
+
+  /**
+   * Retrieve the feedback by status
+   *
+   * @param feedbackStatus status of the feedback
+   * @return List<Feedback> list of feedback object
+   */
+  List<Feedback> findFeedbackByStatus(FeedbackStatus feedbackStatus);
 }

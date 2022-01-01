@@ -18,5 +18,11 @@ spring:
     username: root
     password:
 
+feedback:
+  status:
+    url: http://processfeedback.atwebpages.com/submit.php?feedback=
+    cron-expression: "* */5 * * * *"
+
+
 
 
