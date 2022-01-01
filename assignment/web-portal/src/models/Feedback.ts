@@ -1,5 +1,5 @@
 export interface ContactNumber {
-  countryCode: bigint;
+  countryCode: number;
   number: string;
 }
 
