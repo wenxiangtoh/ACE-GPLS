@@ -16,6 +16,8 @@ import com.service.portal.service.UserQueryService;
 import com.service.portal.service.model.CreateFeedbackModel;
 import com.service.portal.service.model.FeedbackStatusResponseModel;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,8 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service
 public class FeedbackCommandServiceImpl implements FeedbackCommandService {
+
+  private static final Logger logger = LoggerFactory.getLogger(FeedbackCommandServiceImpl.class);
 
   @Autowired private UserQueryService userQueryService;
   @Autowired private UserCommandService userCommandService;
@@ -72,6 +76,7 @@ public class FeedbackCommandServiceImpl implements FeedbackCommandService {
   public void processFeedbackStatus() throws JsonProcessingException {
     List<Feedback> feedbacks = feedbackRepository.findFeedbackByStatus(FeedbackStatus.PROCESSING);
 
+    logger.info(com.service.portal.Constants.PROCESS_FEEDBACK_STATUS_START);
     for (Feedback feedback : feedbacks) {
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.append(feedbackStatusUrl);
@@ -89,5 +94,6 @@ public class FeedbackCommandServiceImpl implements FeedbackCommandService {
       }
     }
     feedbackRepository.saveAll(feedbacks);
+    logger.info(com.service.portal.Constants.PROCESS_FEEDBACK_STATUS_END);
   }
 }

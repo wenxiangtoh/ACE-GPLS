@@ -21,7 +21,7 @@ spring:
 feedback:
   status:
     url: http://processfeedback.atwebpages.com/submit.php?feedback=
-    cron-expression: "* */5 * * * *"
+    cron-expression: "0 0/5 * * * *"
 
 
 
