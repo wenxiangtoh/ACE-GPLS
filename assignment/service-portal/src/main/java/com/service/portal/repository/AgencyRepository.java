@@ -5,6 +5,11 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+/**
+ * JPA Repository for Agency
+ *
+ * @author Wen Xiang
+ */
 @Repository
 public interface AgencyRepository extends JpaRepository<Agency, Long> {
 

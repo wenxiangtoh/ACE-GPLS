@@ -3,6 +3,11 @@ package com.service.portal.service;
 import com.service.library.service.model.SearchUserModel;
 import com.service.library.service.model.UserInfoModel;
 
+/**
+ * Service Interface for user query
+ *
+ * @author Wen Xiang
+ */
 public interface UserQueryService {
 
   /**

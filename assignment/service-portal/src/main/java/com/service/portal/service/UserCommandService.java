@@ -2,6 +2,11 @@ package com.service.portal.service;
 
 import com.service.library.service.model.UserModel;
 
+/**
+ * Service Interface for user command
+ *
+ * @author Wen Xiang
+ */
 public interface UserCommandService {
 
   /**
