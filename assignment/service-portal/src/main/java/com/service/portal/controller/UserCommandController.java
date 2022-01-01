@@ -21,7 +21,7 @@ public class UserCommandController {
   @Autowired private UserCommandService userCommandService;
 
   /**
-   * Method to create user
+   * API to create user
    *
    * @param userModel user model containing user information
    */

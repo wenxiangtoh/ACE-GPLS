@@ -25,4 +25,6 @@ public class FeedbackInfoModel extends AbstractUserModel {
   @NotBlank private String agency;
 
   @NotBlank private FeedbackStatus status;
+
+  @NotBlank private String text;
 }

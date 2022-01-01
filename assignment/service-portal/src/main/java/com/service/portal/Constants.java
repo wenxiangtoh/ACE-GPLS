@@ -10,4 +10,6 @@ public class Constants {
   public static final String AGENCY_NOT_FOUND = "The following agency could not be found. {}";
   public static final String USER_NOT_FOUND =
       "The following user could not be found. name = {}, email = {}";
+  public static final String FEEDBACK_NOT_FOUND =
+      "There are no feedback found. email = {}, countryCode = {}, number = {}";
 }
