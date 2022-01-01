@@ -17,4 +17,12 @@ public enum FeedbackStatus {
     this.value = value;
     this.description = description;
   }
+
+  public String getValue() {
+    return this.value;
+  }
+
+  public String getDescription() {
+    return this.description;
+  }
 }

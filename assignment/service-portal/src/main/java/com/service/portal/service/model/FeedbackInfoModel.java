@@ -1,7 +1,6 @@
 package com.service.portal.service.model;
 
 import com.service.library.service.model.AbstractUserModel;
-import com.service.portal.enumeration.FeedbackStatus;
 import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,7 +23,7 @@ public class FeedbackInfoModel extends AbstractUserModel {
 
   @NotBlank private String agency;
 
-  @NotBlank private FeedbackStatus status;
+  @NotBlank private String status;
 
   @NotBlank private String text;
 }

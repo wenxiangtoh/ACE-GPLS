@@ -75,7 +75,7 @@ public class FeedbackQueryServiceImpl implements FeedbackQueryService {
 
     for (Feedback feedback : feedbacks) {
       var feedbackInfoModel = new FeedbackInfoModel();
-      feedbackInfoModel.setStatus(feedback.getStatus());
+      feedbackInfoModel.setStatus(feedback.getStatus().getDescription());
       feedbackInfoModel.setText(feedback.getDescription());
       feedbackInfoModel.setContactNumber(contactNumber);
 
