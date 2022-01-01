@@ -27,7 +27,7 @@ public class UserQueryServiceImpl implements UserQueryService {
 
     Optional<User> optionalUser = userRepository.findUserByNameAndEmail(name, email);
     if (optionalUser.isEmpty()) {
-      logger.error(Constants.USER_NOT_FOUND, name, email);
+      logger.warn(Constants.USER_NOT_FOUND, name, email);
       return new UserInfoModel();
     }
     var user = optionalUser.get();

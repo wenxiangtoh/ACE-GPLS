@@ -1,5 +1,7 @@
 package com.service.library.service.model;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,7 +20,11 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
-public class UserModel extends AbstractUserModel {
+public abstract class AbstractUserModel {
 
-  @NotBlank private String agencyUuid;
+  @NotBlank private String name;
+
+  @NotBlank @Email private String email;
+
+  @Valid private ContactNumberModel contactNumber;
 }

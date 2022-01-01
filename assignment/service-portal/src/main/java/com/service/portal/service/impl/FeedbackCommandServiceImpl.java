@@ -1,13 +1,16 @@
 package com.service.portal.service.impl;
 
+import com.service.library.Constants;
 import com.service.library.service.model.SearchUserModel;
 import com.service.library.service.model.UserInfoModel;
+import com.service.portal.converter.FeedbackConverter;
+import com.service.portal.converter.UserModelConverter;
+import com.service.portal.enumeration.FeedbackStatus;
 import com.service.portal.repository.FeedbackRepository;
 import com.service.portal.service.FeedbackCommandService;
 import com.service.portal.service.UserCommandService;
 import com.service.portal.service.UserQueryService;
 import com.service.portal.service.model.CreateFeedbackModel;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,30 +32,19 @@ public class FeedbackCommandServiceImpl implements FeedbackCommandService {
 
     var searchUserModel = new SearchUserModel(name, email);
     UserInfoModel userInfoModel = userQueryService.findUserByNameAndEmail(searchUserModel);
+    var userId = userInfoModel.getId();
 
-    if (null == userInfoModel) {
-      //      var userModel =
-      //          com.service.library.service.model.UserModel.builder()
-      //              .name(name)
-      //              .email(email)
-      //              .contactNumber(contactNumber)
-      //              .agencyUuid(agencyUuid)
-      //              .build();
-      //      userCommandService.createUser(userModel);
+    if (userId == Constants.ANNOYMOUS_USER_ID) {
+      var userModel = UserModelConverter.convertFrom(name, email, contactNumber, agencyUuid);
+
+      userCommandService.createUser(userModel);
+
+      userInfoModel = userQueryService.findUserByNameAndEmail(searchUserModel);
+      userId = userInfoModel.getId();
     }
-    var feedbackUuid = UUID.randomUUID().toString();
     var description = createFeedbackModel.getText();
+    var feedback = FeedbackConverter.convertFrom(userId, description, FeedbackStatus.PROCESSING);
 
-    //    var feedback =
-    //        Feedback.builder()
-    //            .uuid(feedbackUuid)
-    //            .userId(userInfoModel.getId())
-    //            .description(description)
-    //            .createdByUserId(Constants.ANNOYMOUS_USER_ID)
-    //            .createdAt(LocalDateTime.now())
-    //            .updatedByUserId(Constants.ANNOYMOUS_USER_ID)
-    //            .updatedAt(LocalDateTime.now())
-    //            .build();
-    //    feedbackRepository.save(feedback);
+    feedbackRepository.save(feedback);
   }
 }

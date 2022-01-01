@@ -1,5 +1,7 @@
-package com.service.library.service.model;
+package com.service.portal.service.model;
 
+import com.service.library.service.model.AbstractUserModel;
+import com.service.portal.enumeration.FeedbackStatus;
 import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,7 +11,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 /**
- * User Model
+ * Feedback Info Model
  *
  * @author Wen Xiang
  */
@@ -18,7 +20,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
-public class UserModel extends AbstractUserModel {
+public class FeedbackInfoModel extends AbstractUserModel {
 
-  @NotBlank private String agencyUuid;
+  @NotBlank private String agency;
+
+  @NotBlank private FeedbackStatus status;
 }
