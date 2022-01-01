@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Feedback Command Controller to create/update/delete feedback records
+ *
+ * @author Wen Xiang
+ */
 @RestController
 @Validated
 public class FeedbackCommandController {

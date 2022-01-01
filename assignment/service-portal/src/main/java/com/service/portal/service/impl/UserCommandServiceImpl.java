@@ -21,6 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * Service Implementation for user command
+ *
+ * @author Wen Xiang
+ */
 @Service
 public class UserCommandServiceImpl implements UserCommandService {
 

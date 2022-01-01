@@ -12,6 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service Implementation for user query
+ *
+ * @author Wen Xiang
+ */
 @Service
 public class UserQueryServiceImpl implements UserQueryService {
 

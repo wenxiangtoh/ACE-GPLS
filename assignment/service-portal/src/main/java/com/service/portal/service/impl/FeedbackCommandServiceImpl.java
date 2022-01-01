@@ -14,6 +14,11 @@ import com.service.portal.service.model.CreateFeedbackModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service Implementation for feedback command
+ *
+ * @author Wen Xiang
+ */
 @Service
 public class FeedbackCommandServiceImpl implements FeedbackCommandService {
 
