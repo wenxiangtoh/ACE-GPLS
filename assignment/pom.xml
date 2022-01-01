@@ -12,9 +12,8 @@
 
   <modules>
     <module>service-library</module>
-    <module>service-feedback</module>
-    <module>service-user</module>
-    <module>web-feedback</module>
+    <module>service-portal</module>
+    <module>web-portal</module>
   </modules>
 
   <build>
