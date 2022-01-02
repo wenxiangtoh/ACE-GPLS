@@ -24,9 +24,9 @@ const Navigation = () => {
   const handleChange = (event: any, newValue: any) => {
     setValue(newValue);
 
-    if (newValue == 0) {
+    if (newValue === 0) {
       history.push('/feedbacks');
-    } else if (newValue == 1) {
+    } else if (newValue === 1) {
       history.push('/feedbacks/view-feedback-status');
     }
   };

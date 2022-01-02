@@ -10,7 +10,7 @@ import {
   Typography,
   withStyles
 } from "@material-ui/core";
-import React, {useState} from "react";
+import React, {FormEvent, useState} from "react";
 import {useHistory} from "react-router-dom";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -46,7 +46,7 @@ const rows = [
 
 const useStyles = makeStyles((theme) => ({
   title: {
-    marginBottom: theme.spacing(5)
+    marginBottom: theme.spacing(3)
   },
   button: {
     marginBottom: theme.spacing(3),
@@ -74,101 +74,138 @@ const FeedbackDetails = () => {
   const [tableState, setTableState] = useState(false);
   const history = useHistory();
 
+  const [email, setEmail] = useState("");
+  const [countryCode, setCountryCode] = useState("");
+  const [number, setNumber] = useState("");
+
+  const handleEmailChange = () => (
+      e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setEmail(e.currentTarget.value);
+  };
+
+  const handleCountryCodeChange = () => (
+      e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setCountryCode(e.currentTarget.value);
+  };
+
+  const handleNumberChange = () => (
+      e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setNumber(e.currentTarget.value);
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
-      <div>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <div>
-          <Typography
-              className={classes.title}
-              variant="h3"
-              component="h2"> Feedback Details Page
-          </Typography>
-        </div>
+          <div>
+            <Typography
+                className={classes.title}
+                variant="h3"
+                component="h2"> Feedback Details Page
+            </Typography>
+          </div>
 
-        <div>
-          <TextField
-              required
-              id="name"
-              className={classes.textField}
-              label="Email"
-              defaultValue=""
-              variant="outlined"
-          />
-        </div>
-        <div>
-          <TextField
-              required
-              id="countryCode"
-              className={classes.contactNumber}
-              label="Country Code"
-              defaultValue=""
-              variant="outlined"
-          />
-          <TextField
-              required
-              id="number"
-              className={classes.contactNumber}
-              label="Number"
-              defaultValue=""
-              variant="outlined"
-          />
-        </div>
-        <div>
-          <label>
-            <Button id="home" className={classes.button} variant="contained" color="primary"
-                    component="span"
-                    onClick={() => {
-                      history.push('/');
-                    }}>
-              home
-            </Button>
-          </label>
-        </div>
-        <div>
-          <label>
-            <Button id="feedback-status-submit-button" className={classes.button}
-                    variant="contained"
-                    color="primary" component="span"
-                    onClick={() => {
-                      setTableState(true)
-                    }}
-            >
-              Submit
-            </Button>
-          </label>
-        </div>
+          <div>
+            <TextField
+                required
+                id="name"
+                className={classes.textField}
+                label="Email"
+                defaultValue=""
+                variant="outlined"
+                onChange={handleEmailChange()}
+                autoComplete="new"
+                type="text"
+            />
+          </div>
+          <div>
+            <TextField
+                required
+                id="countryCode"
+                className={classes.contactNumber}
+                label="Country Code"
+                defaultValue=""
+                variant="outlined"
+                onChange={handleCountryCodeChange()}
+                autoComplete="on"
+                type="text"
+            />
+            <TextField
+                required
+                id="number"
+                className={classes.contactNumber}
+                label="Number"
+                defaultValue=""
+                variant="outlined"
+                onChange={handleNumberChange()}
+                autoComplete="off"
+                type="text"
+            />
+          </div>
+          <div>
+            <label>
+              <Button id="home" className={classes.button} variant="contained" color="primary"
+                      component="span"
+                      onClick={() => {
+                        history.push('/');
+                      }}>
+                home
+              </Button>
+            </label>
+          </div>
+          <div>
+            <label>
+              <Button id="feedback-status-submit-button" className={classes.button}
+                      variant="contained"
+                      color="primary" component="span"
+                      onClick={() => {
+                        setTableState(true)
+                      }}
+              >
+                Submit
+              </Button>
+            </label>
+          </div>
 
-        {tableState && (
-            <Table
-                className={classes.table}
-                aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell
-                      align="center"> Dessert(100g serving)
-                  </StyledTableCell>
-                  <StyledTableCell align="center">Calories</StyledTableCell>
-                  <StyledTableCell align="center">Fat&nbsp;(g)</StyledTableCell>
-                  <StyledTableCell align="center">Carbs&nbsp;(g)</StyledTableCell>
-                  <StyledTableCell align="center">Protein&nbsp;(g)</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                    <StyledTableRow key={row.name}>
-                      <StyledTableCell align="center" component="th" scope="row">
-                        {row.name}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">{row.calories}</StyledTableCell>
-                      <StyledTableCell align="center">{row.fat}</StyledTableCell>
-                      <StyledTableCell align="center">{row.carbs}</StyledTableCell>
-                      <StyledTableCell align="center">{row.protein}</StyledTableCell>
-                    </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-        )
-        }
-      </div>
+          {tableState && (
+              <Table
+                  className={classes.table}
+                  aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell
+                        align="center"> Dessert(100g serving)
+                    </StyledTableCell>
+                    <StyledTableCell align="center">Calories</StyledTableCell>
+                    <StyledTableCell align="center">Fat&nbsp;(g)</StyledTableCell>
+                    <StyledTableCell align="center">Carbs&nbsp;(g)</StyledTableCell>
+                    <StyledTableCell align="center">Protein&nbsp;(g)</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                      <StyledTableRow key={row.name}>
+                        <StyledTableCell align="center" component="th" scope="row">
+                          {row.name}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">{row.calories}</StyledTableCell>
+                        <StyledTableCell align="center">{row.fat}</StyledTableCell>
+                        <StyledTableCell align="center">{row.carbs}</StyledTableCell>
+                        <StyledTableCell align="center">{row.protein}</StyledTableCell>
+                      </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+          )
+          }
+        </div>
+      </form>
   );
 };
 

@@ -1,4 +1,4 @@
-export interface ContactNumber {
+export interface ContactNumberItem {
   countryCode: number;
   number: string;
 }
@@ -6,7 +6,7 @@ export interface ContactNumber {
 export interface CreateFeedbackRequest {
   name: string,
   email: string,
-  contactNumber: ContactNumber;
+  contactNumber: ContactNumberItem;
   text: string;
   agencyUuid: string;
 }
@@ -22,19 +22,19 @@ export interface AgencyDropdownList {
 
 export interface FeedbackInfoRequest {
   email: string;
-  contactNumber: ContactNumber;
+  contactNumber: ContactNumberItem;
 }
 
-export interface FeedbackInfo {
+export interface FeedbackInfoItem {
   name: string;
   email: string;
-  contactNumber: ContactNumber;
+  contactNumber: ContactNumberItem;
   agency: string;
   status: string;
   text: string;
 }
 
 export interface FeedbackInfoResponse {
-  feedbackInfo: FeedbackInfo[];
+  feedbackInfo: FeedbackInfoItem[];
 }
 
