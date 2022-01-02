@@ -1,8 +1,14 @@
 import {Button, makeStyles, TextField, Typography} from "@material-ui/core";
+import React from "react";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   title: {
     marginBottom: theme.spacing(5)
+  },
+  button: {
+    marginBottom: theme.spacing(3),
+    width: '15%',
   },
   textField: {
     marginLeft: theme.spacing(3),
@@ -20,8 +26,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
 const FeedbackForm = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
       <div>
@@ -84,13 +92,28 @@ const FeedbackForm = () => {
               variant="outlined"
           />
         </div>
-        <label>
-          <Button variant="contained" color="primary" component="span">
-            Submit
-          </Button>
-        </label>
+        <div>
+          <label>
+            <Button id="home" className={classes.button} variant="contained" color="primary"
+                    component="span"
+                    onClick={() => {
+                      history.push('/');
+                    }}>
+              home
+            </Button>
+          </label>
+        </div>
+        <div>
+          <label>
+            <Button id="feedback-submit-button" className={classes.button} variant="contained"
+                    color="primary"
+                    component="span">
+              Submit
+            </Button>
+          </label>
+        </div>
       </div>
-  );
+  )
 };
 
 export default FeedbackForm;
