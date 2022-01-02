@@ -4,6 +4,7 @@ import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   title: {
+    marginTop: theme.spacing(3),
     marginBottom: theme.spacing(5)
   }
 }));
@@ -50,11 +51,10 @@ const Navigation = () => {
             className={classes.title}
             variant="h3"
             component="h2">
-          Home Page
+          Welcome to the Feedback Processing Portal!
         </Typography>
       </div>
-  )
-      ;
+  );
 };
 
 export default Navigation;
