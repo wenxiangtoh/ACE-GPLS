@@ -51,7 +51,7 @@ const Navigation = () => {
             className={classes.title}
             variant="h3"
             component="h2">
-          Welcome to the Feedback Processing Portal!
+          Welcome to the Portal!
         </Typography>
       </div>
   );

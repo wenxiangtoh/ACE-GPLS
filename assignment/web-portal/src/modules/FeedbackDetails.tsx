@@ -10,11 +10,12 @@ import {
   Typography,
   withStyles
 } from "@material-ui/core";
-import React, {FormEvent, useState} from "react";
+import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import axios from "axios";
 import {POST_FEEDBACK_INFO_URL} from "../constants/apiUrl";
-import {FeedbackInfoItem} from "../models/Feedback";
+import {FeedbackInfoItem, FeedbackInfoRequest} from "../models/Feedback";
+import {useForm} from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -63,35 +64,19 @@ const FeedbackDetails = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const [email, setEmail] = useState("");
-  const [countryCode, setCountryCode] = useState("");
-  const [number, setNumber] = useState("");
+  const {register, errors, handleSubmit} = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit"
+  });
+
   const [feedbackDetails, setFeedbackDetails] = React.useState<FeedbackInfoItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleEmailChange = () => (
-      e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setEmail(e.currentTarget.value);
+  const handleSubmitFeedbackDetails = (data: FeedbackInfoRequest) => {
+    postGetFeedbackDetails(data);
   };
 
-  const handleCountryCodeChange = () => (
-      e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setCountryCode(e.currentTarget.value);
-  };
-
-  const handleNumberChange = () => (
-      e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setNumber(e.currentTarget.value);
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
-  const postGetFeedbackDetails = async () => {
+  const postGetFeedbackDetails = async (data: FeedbackInfoRequest) => {
     await axios({
       method: 'POST',
       url: POST_FEEDBACK_INFO_URL,
@@ -100,20 +85,15 @@ const FeedbackDetails = () => {
         'Access-Control-Allow-Origin': '*',
       },
       data: {
-        "email": email,
+        "email": data.email,
         "contactNumber": {
-          "countryCode": countryCode,
-          "number": number
+          "countryCode": data.countryCode,
+          "number": data.number
         },
       },
     }).then((res) => {
-      if (feedbackDetails !== undefined) {
-        setFeedbackDetails(res.data);
-        setIsLoading(false);
-        if (feedbackDetails.length === 0) {
-          alert("No feedback Records Found!");
-        }
-      }
+      setFeedbackDetails(res.data);
+      setIsLoading(false);
     })
     .catch(error => {
       console.log(error);
@@ -121,51 +101,66 @@ const FeedbackDetails = () => {
   }
 
   return (
-      <form onSubmit={handleSubmit} autoComplete="off">
+      <form onSubmit={handleSubmit(handleSubmitFeedbackDetails)} autoComplete="off">
         <div>
           <div>
             <Typography
                 className={classes.title}
                 variant="h3"
-                component="h2"> Feedback Details Page
+                component="h2">
+              Feedback Details Page
             </Typography>
           </div>
-
           <div>
             <TextField
-                required
-                id="name"
+                id="email"
                 className={classes.textField}
                 label="Email"
-                defaultValue=""
                 variant="outlined"
-                onChange={handleEmailChange()}
-                autoComplete="new"
+                autoComplete="off"
                 type="text"
+                name="email"
+                inputRef={register({
+                  required: {
+                    value: true,
+                    message: 'Email cannot be empty!'
+                  },
+                })}
+                {...(errors.email && {error: true, helperText: errors.email.message})}
             />
           </div>
           <div>
             <TextField
-                required
                 id="countryCode"
                 className={classes.contactNumber}
                 label="Country Code"
-                defaultValue=""
                 variant="outlined"
-                onChange={handleCountryCodeChange()}
                 autoComplete="on"
-                type="text"
+                type="number"
+                name="countryCode"
+                inputRef={register({
+                  required: {
+                    value: true,
+                    message: 'Country Code cannot be empty!'
+                  },
+                })}
+                {...(errors.countryCode && {error: true, helperText: errors.countryCode.message})}
             />
             <TextField
-                required
                 id="number"
                 className={classes.contactNumber}
                 label="Number"
-                defaultValue=""
                 variant="outlined"
-                onChange={handleNumberChange()}
-                autoComplete="off"
+                autoComplete="new"
                 type="text"
+                name="number"
+                inputRef={register({
+                  required: {
+                    value: true,
+                    message: 'Number cannot be empty!'
+                  },
+                })}
+                {...(errors.number && {error: true, helperText: errors.number.message})}
             />
           </div>
           <div>
@@ -181,12 +176,12 @@ const FeedbackDetails = () => {
           </div>
           <div>
             <label>
-              <Button id="feedback-status-submit-button" className={classes.button}
-                      variant="contained"
-                      color="primary" component="span"
-                      onClick={() => {
-                        postGetFeedbackDetails()
-                      }}
+              <Button
+                  id="feedback-status-submit-button"
+                  className={classes.button}
+                  variant="contained"
+                  color="primary"
+                  type="submit"
               >
                 Submit
               </Button>
@@ -212,7 +207,7 @@ const FeedbackDetails = () => {
                   feedbackDetails.map((feedbackInfoItem, index) => (
                       <StyledTableRow key={index}>
                         <StyledTableCell align="left" component="th" scope="row">
-                          {index}
+                          {index + 1}
                         </StyledTableCell>
                         <StyledTableCell align="left" component="th" scope="row">
                           {feedbackInfoItem.name}
@@ -220,7 +215,8 @@ const FeedbackDetails = () => {
                         <StyledTableCell
                             align="left">{feedbackInfoItem.email}</StyledTableCell>
                         <StyledTableCell
-                            align="left">{feedbackInfoItem.contactNumber.countryCode + " " + feedbackInfoItem.contactNumber.number}</StyledTableCell>
+                            align="left">{
+                          '+'.concat(feedbackInfoItem.contactNumber.countryCode.toString()).concat(" ").concat(feedbackInfoItem.contactNumber.number)}</StyledTableCell>
                         <StyledTableCell
                             align="left">{feedbackInfoItem.agency}</StyledTableCell>
                         <StyledTableCell

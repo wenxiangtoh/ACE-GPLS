@@ -1,9 +1,10 @@
 import {Button, makeStyles, MenuItem, TextField, Typography} from "@material-ui/core";
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import axios from "axios";
 import {GET_AGENCIES_URL, POST_FEEDBACKS_URL} from "../constants/apiUrl";
-import {ListItem, LookupListApiItem} from "../models/Feedback";
+import {CreateFeedbackFormData, ListItem, LookupListApiItem} from "../models/Feedback";
+import {useForm} from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -37,38 +38,14 @@ const FeedbackForm = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [countryCode, setCountryCode] = useState("");
-  const [number, setNumber] = useState("");
+  const {register, errors, handleSubmit, reset} = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit"
+  });
+
   const [agencyList, setAgencyList] = React.useState<ListItem[]>([]);
   const [agency, setAgency] = React.useState<LookupListApiItem>();
-  const [feedback, setFeedback] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
-  const handleNameChange = () => (
-      e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setName(e.currentTarget.value);
-  };
-
-  const handleEmailChange = () => (
-      e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setEmail(e.currentTarget.value);
-  };
-
-  const handleCountryCodeChange = () => (
-      e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setCountryCode(e.currentTarget.value);
-  };
-
-  const handleNumberChange = () => (
-      e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setNumber(e.currentTarget.value);
-  };
 
   const handleAgencyChange = (event: any) => {
     const index = agencyList.map(item => item.value).indexOf(event.target.value);
@@ -79,14 +56,8 @@ const FeedbackForm = () => {
     setAgency(lookupListApiItem);
   };
 
-  const handleFeedbackChange = () => (
-      e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFeedback(e.currentTarget.value);
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleProcessFeedback = (data: CreateFeedbackFormData) => {
+    postCreateFeedback(data);
   };
 
   const getAgencyList = async () => {
@@ -115,7 +86,7 @@ const FeedbackForm = () => {
     });
   };
 
-  const postCreateFeedback = async () => {
+  const postCreateFeedback = async (data: CreateFeedbackFormData) => {
     await axios({
       method: 'POST',
       url: POST_FEEDBACKS_URL,
@@ -124,16 +95,18 @@ const FeedbackForm = () => {
         'Access-Control-Allow-Origin': '*',
       },
       data: {
-        "name": name,
-        "email": email,
+        "name": data.name,
+        "email": data.email,
         "contactNumber": {
-          "countryCode": countryCode,
-          "number": number
+          "countryCode": data?.countryCode,
+          "number": data?.number
         },
         "agencyUuid": agency?.code,
-        "text": feedback
+        "text": data.feedback
       },
     }).then((res) => {
+      reset();
+      setAgency(undefined)
       alert("Your feedback have been submitted. Do note that the processing would takes up to 5 minutes.")
     })
     .catch(error => {
@@ -149,64 +122,88 @@ const FeedbackForm = () => {
     return <div>loading</div>
   }
   return (
-      <form onSubmit={handleSubmit} autoComplete="off">
+      <form onSubmit={handleSubmit(handleProcessFeedback)} autoComplete="off">
         <div>
-          <Typography className={classes.title} variant="h3" component="h2">
+          <Typography
+              className={classes.title}
+              variant="h3"
+              component="h2">
             Feedback Submission Form
           </Typography>
           <div>
             <TextField
-                required
                 id="name"
                 className={classes.textField}
                 label="Name"
-                value={name}
                 variant="outlined"
-                onChange={handleNameChange()}
                 autoComplete="new"
                 type="text"
+                name="name"
+                inputRef={register({
+                  required: {
+                    value: true,
+                    message: 'Name cannot be empty!'
+                  },
+                })}
+                {...(errors.name && {error: true, helperText: errors.name.message})}
             />
             <TextField
-                required
                 id="email"
                 className={classes.textField}
                 label="Email"
-                value={email}
                 variant="outlined"
-                onChange={handleEmailChange()}
                 autoComplete="new"
                 type="text"
+                name="email"
+                inputRef={register({
+                  required: {
+                    value: true,
+                    message: 'Email cannot be empty!'
+                  },
+                })}
+                {...(errors.email && {error: true, helperText: errors.email.message})}
             />
           </div>
           <div>
             <TextField
-                required
                 id="countryCode"
                 className={classes.contactNumber}
                 label="Country Code"
-                value={countryCode}
-                onChange={handleCountryCodeChange()}
                 variant="outlined"
                 autoComplete="on"
-                type="text"
+                type="number"
+                name="countryCode"
+                inputRef={register({
+                  required: {
+                    value: true,
+                    message: 'Country Code cannot be empty!'
+                  }
+                })}
+                {...(errors.countryCode && {error: true, helperText: errors.countryCode.message})}
             />
             <TextField
-                required
                 id="number"
                 className={classes.contactNumber}
                 label="Number"
-                value={number}
+                // value={number}
                 variant="outlined"
-                onChange={handleNumberChange()}
                 autoComplete="off"
                 type="text"
+                name="number"
+                inputRef={register({
+                  required: {
+                    value: true,
+                    message: 'Number cannot be empty!'
+                  },
+                })}
+                {...(errors.number && {error: true, helperText: errors.number.message})}
             />
             <TextField
                 id="agency"
                 className={classes.textField}
                 select
                 label="Agency"
-                value={agency?.description}
+                value={agency !== undefined ? agency.description : ""}
                 onChange={handleAgencyChange}
                 variant="outlined"
             >
@@ -224,11 +221,17 @@ const FeedbackForm = () => {
                 placeholder={"Enter your feedback..."}
                 multiline
                 rows={6}
-                defaultValue={feedback}
                 variant="outlined"
-                onChange={handleFeedbackChange()}
                 autoComplete="off"
                 type="text"
+                name="feedback"
+                inputRef={register({
+                  required: {
+                    value: true,
+                    message: 'Feedback cannot be empty!'
+                  },
+                })}
+                {...(errors.feedback && {error: true, helperText: errors.feedback.message})}
             />
           </div>
           <div>
@@ -249,16 +252,14 @@ const FeedbackForm = () => {
                   className={classes.button}
                   variant="contained"
                   color="primary"
-                  type={"submit"}
-                  onClick={() => {
-                    postCreateFeedback()
-                  }}
+                  type="submit"
               >
                 Submit
               </Button>
             </label>
           </div>
         </div>
+
       </form>
   );
 };
