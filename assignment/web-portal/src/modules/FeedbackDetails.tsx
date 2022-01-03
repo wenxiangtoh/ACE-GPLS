@@ -12,37 +12,9 @@ import {
 } from "@material-ui/core";
 import React, {FormEvent, useState} from "react";
 import {useHistory} from "react-router-dom";
-
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
-
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
-}))(TableRow);
-
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
-  return {name, calories, fat, carbs, protein};
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
+import axios from "axios";
+import {POST_FEEDBACK_INFO_URL} from "../constants/apiUrl";
+import {FeedbackInfoItem} from "../models/Feedback";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -64,19 +36,38 @@ const useStyles = makeStyles((theme) => ({
   },
   table: {
     marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(20),
+    marginLeft: theme.spacing(15),
     width: '80%',
   },
 }));
 
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
+
 const FeedbackDetails = () => {
   const classes = useStyles();
-  const [tableState, setTableState] = useState(false);
   const history = useHistory();
 
   const [email, setEmail] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [number, setNumber] = useState("");
+  const [feedbackDetails, setFeedbackDetails] = React.useState<FeedbackInfoItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleEmailChange = () => (
       e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -99,6 +90,35 @@ const FeedbackDetails = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
+
+  const postGetFeedbackDetails = async () => {
+    await axios({
+      method: 'POST',
+      url: POST_FEEDBACK_INFO_URL,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Access-Control-Allow-Origin': '*',
+      },
+      data: {
+        "email": email,
+        "contactNumber": {
+          "countryCode": countryCode,
+          "number": number
+        },
+      },
+    }).then((res) => {
+      if (feedbackDetails !== undefined) {
+        setFeedbackDetails(res.data);
+        setIsLoading(false);
+        if (feedbackDetails.length === 0) {
+          alert("No feedback Records Found!");
+        }
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
 
   return (
       <form onSubmit={handleSubmit} autoComplete="off">
@@ -165,45 +185,52 @@ const FeedbackDetails = () => {
                       variant="contained"
                       color="primary" component="span"
                       onClick={() => {
-                        setTableState(true)
+                        postGetFeedbackDetails()
                       }}
               >
                 Submit
               </Button>
             </label>
           </div>
-
-          {tableState && (
+          {!isLoading && feedbackDetails.length > 0 && (
               <Table
                   className={classes.table}
                   aria-label="customized table">
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell
-                        align="center"> Dessert(100g serving)
-                    </StyledTableCell>
-                    <StyledTableCell align="center">Calories</StyledTableCell>
-                    <StyledTableCell align="center">Fat&nbsp;(g)</StyledTableCell>
-                    <StyledTableCell align="center">Carbs&nbsp;(g)</StyledTableCell>
-                    <StyledTableCell align="center">Protein&nbsp;(g)</StyledTableCell>
+                    <StyledTableCell align="center">S/N&nbsp;</StyledTableCell>
+                    <StyledTableCell align="center">Name&nbsp;</StyledTableCell>
+                    <StyledTableCell align="center">Email&nbsp;</StyledTableCell>
+                    <StyledTableCell align="center">Contact Number&nbsp;</StyledTableCell>
+                    <StyledTableCell align="center">Agency&nbsp;</StyledTableCell>
+                    <StyledTableCell align="center">Feedback&nbsp;</StyledTableCell>
+                    <StyledTableCell align="center">Status&nbsp;</StyledTableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {rows.map((row) => (
-                      <StyledTableRow key={row.name}>
-                        <StyledTableCell align="center" component="th" scope="row">
-                          {row.name}
+
+                <TableBody>{
+                  feedbackDetails.map((feedbackInfoItem, index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell align="left" component="th" scope="row">
+                          {index}
                         </StyledTableCell>
-                        <StyledTableCell align="center">{row.calories}</StyledTableCell>
-                        <StyledTableCell align="center">{row.fat}</StyledTableCell>
-                        <StyledTableCell align="center">{row.carbs}</StyledTableCell>
-                        <StyledTableCell align="center">{row.protein}</StyledTableCell>
-                      </StyledTableRow>
-                  ))}
+                        <StyledTableCell align="left" component="th" scope="row">
+                          {feedbackInfoItem.name}
+                        </StyledTableCell>
+                        <StyledTableCell
+                            align="left">{feedbackInfoItem.email}</StyledTableCell>
+                        <StyledTableCell
+                            align="left">{feedbackInfoItem.contactNumber.countryCode + " " + feedbackInfoItem.contactNumber.number}</StyledTableCell>
+                        <StyledTableCell
+                            align="left">{feedbackInfoItem.agency}</StyledTableCell>
+                        <StyledTableCell
+                            align="left">{feedbackInfoItem.text}</StyledTableCell>
+                        <StyledTableCell
+                            align="left">{feedbackInfoItem.status}</StyledTableCell>
+                      </StyledTableRow>))}
                 </TableBody>
               </Table>
-          )
-          }
+          )}
         </div>
       </form>
   );

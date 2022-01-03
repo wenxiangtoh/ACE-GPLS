@@ -3,26 +3,15 @@ export interface ContactNumberItem {
   number: string;
 }
 
-export interface CreateFeedbackRequest {
-  name: string,
-  email: string,
-  contactNumber: ContactNumberItem;
-  text: string;
-  agencyUuid: string;
+export interface ListItem {
+  children: string;
+  key: string;
+  value: string;
 }
 
 export interface LookupListApiItem extends Record<string, string> {
   code: string;
   description: string;
-}
-
-export interface AgencyDropdownList {
-  agencies: LookupListApiItem[];
-}
-
-export interface FeedbackInfoRequest {
-  email: string;
-  contactNumber: ContactNumberItem;
 }
 
 export interface FeedbackInfoItem {
@@ -32,9 +21,5 @@ export interface FeedbackInfoItem {
   agency: string;
   status: string;
   text: string;
-}
-
-export interface FeedbackInfoResponse {
-  feedbackInfo: FeedbackInfoItem[];
 }
 
