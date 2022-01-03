@@ -46,6 +46,9 @@ public class FeedbackQueryServiceImpl implements FeedbackQueryService {
     List<Feedback> feedbacks =
         feedbackRepository.findFeedbacksByEmailAndContactNumber(email, countryCode, number);
 
+    if (feedbacks.isEmpty()) {
+      return new ArrayList<>();
+    }
     var userId = feedbacks.get(0).getUserId();
     var user = checkUserExistsById(userId, email, countryCode, number);
 

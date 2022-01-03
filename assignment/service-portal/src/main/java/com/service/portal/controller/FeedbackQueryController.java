@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +28,7 @@ public class FeedbackQueryController {
    * @param feedbackInfoRequestModel request model for feedback info
    * @return List<FeedbackInfoModel> list of model containing feedback information
    */
-  @GetMapping("/feedbacks/search")
+  @PostMapping("/feedbacks/search")
   public ResponseEntity<List<FeedbackInfoModel>> findFeedbackByEmailAndContactNumber(
       @RequestBody FeedbackInfoRequestModel feedbackInfoRequestModel) {
     return ResponseEntity.ok(
