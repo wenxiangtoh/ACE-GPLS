@@ -13,6 +13,7 @@ public class Constants {
   public static final String FEEDBACK_NOT_FOUND =
       "There are no feedback found. email = {}, countryCode = {}, number = {}";
   public static final String POSITIVE = "positive";
+  public static final String NEGATIVE = "negative";
   public static final String PROCESS_FEEDBACK_STATUS_START =
       "Processing Feedback status started...";
   public static final String PROCESS_FEEDBACK_STATUS_END = "Processing Feedback status ended...";
