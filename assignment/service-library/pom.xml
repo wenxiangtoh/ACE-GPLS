@@ -9,7 +9,7 @@
     <version>2.6.2</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  <groupId>com.service</groupId>
+  <groupId>com.service.library</groupId>
   <artifactId>service-library</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>service-library</name>
@@ -83,20 +83,6 @@
   </dependencyManagement>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-            </exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-    </plugins>
   </build>
 
 </project>

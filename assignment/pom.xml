@@ -13,7 +13,6 @@
   <modules>
     <module>service-library</module>
     <module>service-portal</module>
-    <module>web-portal</module>
   </modules>
 
   <build>

@@ -9,7 +9,7 @@
     <version>2.6.2</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  <groupId>com.service</groupId>
+  <groupId>com.service.portal</groupId>
   <artifactId>service-portal</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>service-portal</name>
@@ -24,7 +24,7 @@
     </dependency>
 
     <dependency>
-      <groupId>com.service</groupId>
+      <groupId>com.service.library</groupId>
       <artifactId>service-library</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
