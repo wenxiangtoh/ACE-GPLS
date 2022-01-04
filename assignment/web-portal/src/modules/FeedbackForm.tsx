@@ -95,13 +95,15 @@ const FeedbackForm = () => {
   }
 
   useEffect(() => {
-    const lookupListApiItem: LookupListApiItem = {
-      "code": agencyData[0].code,
-      "description": agencyData[0].description
-    };
-    setAgency(lookupListApiItem);
+    if (!isAgencyDataLoading) {
+      const lookupListApiItem: LookupListApiItem = {
+        "code": agencyData[0].code,
+        "description": agencyData[0].description
+      };
+      setAgency(lookupListApiItem);
+    }
   }, []);
-  
+
   if (isAgencyDataLoading || isAgencyDataFetching) {
     return <div> Loading... </div>
   }
