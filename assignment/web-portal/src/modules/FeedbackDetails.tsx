@@ -16,6 +16,7 @@ import axios from "axios";
 import {POST_FEEDBACK_INFO_URL} from "../constants/apiUrl";
 import {FeedbackInfoItem, FeedbackInfoRequest} from "../models/Feedback";
 import {useForm} from "react-hook-form";
+import {useMutation, useQueryClient} from "react-query";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -63,6 +64,7 @@ const StyledTableRow = withStyles((theme) => ({
 const FeedbackDetails = () => {
   const classes = useStyles();
   const history = useHistory();
+  const queryClient = useQueryClient();
 
   const {register, errors, handleSubmit} = useForm({
     mode: "onSubmit",
@@ -73,8 +75,11 @@ const FeedbackDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleSubmitFeedbackDetails = (data: FeedbackInfoRequest) => {
-    postGetFeedbackDetails(data);
+    getFeedbackDetailsMutation.mutate(data);
   };
+
+  const getFeedbackDetailsMutation = useMutation(POST_FEEDBACK_INFO_URL, (data: FeedbackInfoRequest) =>
+      postGetFeedbackDetails(data));
 
   const postGetFeedbackDetails = async (data: FeedbackInfoRequest) => {
     await axios({
@@ -92,8 +97,13 @@ const FeedbackDetails = () => {
         },
       },
     }).then((res) => {
+      queryClient.invalidateQueries(POST_FEEDBACK_INFO_URL);
       setFeedbackDetails(res.data);
       setIsLoading(false);
+
+      if (res.data.length === 0) {
+        alert("There are no Feedback Records found!")
+      }
     })
     .catch(error => {
       console.log(error);

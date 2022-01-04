@@ -1,10 +1,12 @@
 import {Button, makeStyles, MenuItem, TextField, Typography} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useHistory} from "react-router-dom";
 import axios from "axios";
 import {GET_AGENCIES_URL, POST_FEEDBACKS_URL} from "../constants/apiUrl";
-import {CreateFeedbackFormData, ListItem, LookupListApiItem} from "../models/Feedback";
+import {CreateFeedbackFormData, LookupListApiItem} from "../models/Feedback";
 import {useForm} from "react-hook-form";
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {GET_AGENCY_KEY, POST_FEEDBACKS_KEY} from "../constants/apiKey";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -37,89 +39,71 @@ const useStyles = makeStyles((theme) => ({
 const FeedbackForm = () => {
   const classes = useStyles();
   const history = useHistory();
+  const queryClient = useQueryClient();
 
   const {register, errors, handleSubmit, reset} = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit"
   });
 
-  const [agencyList, setAgencyList] = React.useState<ListItem[]>([]);
   const [agency, setAgency] = React.useState<LookupListApiItem>();
-  const [isLoading, setIsLoading] = useState(true);
+
+  const handleProcessFeedback = (data: CreateFeedbackFormData) => {
+    createFeedbackMutation.mutate(data);
+  };
+
+  const {
+    isLoading: isAgencyDataLoading,
+    data: agencyData,
+    isFetching: isAgencyDataFetching
+  } = useQuery(GET_AGENCY_KEY, () =>
+      fetch(
+          GET_AGENCIES_URL
+      ).then((res) => res.json())
+  );
 
   const handleAgencyChange = (event: any) => {
-    const index = agencyList.map(item => item.value).indexOf(event.target.value);
+    const index = agencyData.map((item: { description: number; }) => item.description).indexOf(event.target.value);
     const lookupListApiItem: LookupListApiItem = {
-      "code": agencyList[index].key,
+      "code": agencyData[index].code,
       "description": event.target.value
     };
     setAgency(lookupListApiItem);
   };
 
-  const handleProcessFeedback = (data: CreateFeedbackFormData) => {
-    postCreateFeedback(data);
-  };
-
-  const getAgencyList = async () => {
-    await axios({
-      method: 'GET',
-      url: GET_AGENCIES_URL,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*',
-      },
-    }).then((res) => {
-      const agencyDropdownList: LookupListApiItem[] = res.data;
-      const agencyDropdownListMenuItem = [
-        ...agencyDropdownList.map(({code, description}) => ({
-          children: code,
-          key: code,
-          value: description,
-        })),
-      ];
-      setAgencyList(agencyDropdownListMenuItem);
-      setIsLoading(false);
-      return agencyDropdownListMenuItem;
-    })
-    .catch(error => {
-      console.log(error);
-    });
-  };
+  const createFeedbackMutation = useMutation(POST_FEEDBACKS_KEY, (data: CreateFeedbackFormData) =>
+      postCreateFeedback(data));
 
   const postCreateFeedback = async (data: CreateFeedbackFormData) => {
-    await axios({
-      method: 'POST',
-      url: POST_FEEDBACKS_URL,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*',
+    const requestPayload = {
+      "name": data.name,
+      "email": data.email,
+      "contactNumber": {
+        "countryCode": data?.countryCode,
+        "number": data?.number
       },
-      data: {
-        "name": data.name,
-        "email": data.email,
-        "contactNumber": {
-          "countryCode": data?.countryCode,
-          "number": data?.number
-        },
-        "agencyUuid": agency?.code,
-        "text": data.feedback
-      },
-    }).then((res) => {
+      "agencyUuid": agency?.code,
+      "text": data.feedback
+    }
+    await axios.post(POST_FEEDBACKS_URL, requestPayload).then((res) => {
+      queryClient.invalidateQueries(POST_FEEDBACKS_KEY);
       reset();
-      setAgency(undefined)
       alert("Your feedback have been submitted. Do note that the processing would takes up to 5 minutes.")
-    })
-    .catch(error => {
+    }).catch(error => {
       console.log(error);
     });
   }
 
   useEffect(() => {
-    getAgencyList();
+    const lookupListApiItem: LookupListApiItem = {
+      "code": agencyData[0].code,
+      "description": agencyData[0].description
+    };
+    setAgency(lookupListApiItem);
   }, []);
-
-  if (isLoading) {
-    return <div>loading</div>
+  
+  if (isAgencyDataLoading || isAgencyDataFetching) {
+    return <div> Loading... </div>
   }
   return (
       <form onSubmit={handleSubmit(handleProcessFeedback)} autoComplete="off">
@@ -179,13 +163,15 @@ const FeedbackForm = () => {
                     message: 'Country Code cannot be empty!'
                   }
                 })}
-                {...(errors.countryCode && {error: true, helperText: errors.countryCode.message})}
+                {...(errors.countryCode && {
+                  error: true,
+                  helperText: errors.countryCode.message
+                })}
             />
             <TextField
                 id="number"
                 className={classes.contactNumber}
                 label="Number"
-                // value={number}
                 variant="outlined"
                 autoComplete="off"
                 type="text"
@@ -203,13 +189,13 @@ const FeedbackForm = () => {
                 className={classes.textField}
                 select
                 label="Agency"
-                value={agency !== undefined ? agency.description : ""}
+                defaultValue={agencyData[0].description}
                 onChange={handleAgencyChange}
                 variant="outlined"
             >
-              {agencyList.map((option) => (
-                  <MenuItem key={option.key} value={option.value}>
-                    {option.value}
+              {agencyData.map((option: LookupListApiItem) => (
+                  <MenuItem key={option.code} value={option.description}>
+                    {option.description}
                   </MenuItem>
               ))}
             </TextField>
@@ -259,7 +245,6 @@ const FeedbackForm = () => {
             </label>
           </div>
         </div>
-
       </form>
   );
 };
