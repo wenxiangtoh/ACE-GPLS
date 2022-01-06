@@ -41,6 +41,11 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(15),
     width: '80%',
   },
+  errorMessage: {
+    marginTop: theme.spacing(-3),
+    marginBottom: theme.spacing(3),
+    color: "red"
+  }
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -73,6 +78,7 @@ const FeedbackDetails = () => {
 
   const [feedbackDetails, setFeedbackDetails] = React.useState<FeedbackInfoItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [feedbackDetailsError, setFeedbackDetailsError] = useState("");
 
   const handleSubmitFeedbackDetails = (data: FeedbackInfoRequest) => {
     getFeedbackDetailsMutation.mutate(data);
@@ -100,13 +106,15 @@ const FeedbackDetails = () => {
       queryClient.invalidateQueries(POST_FEEDBACK_INFO_URL);
       setFeedbackDetails(res.data);
       setIsLoading(false);
+      setFeedbackDetailsError("")
 
       if (res.data.length === 0) {
         alert("There are no Feedback Records found!")
       }
     })
     .catch(error => {
-      console.log(error);
+      setFeedbackDetailsError("Please check your input again.")
+      console.log(error.message);
     });
   }
 
@@ -135,6 +143,10 @@ const FeedbackDetails = () => {
                     value: true,
                     message: 'Email cannot be empty!'
                   },
+                  maxLength: {
+                    value: 321,
+                    message: "Email is too long"
+                  }
                 })}
                 {...(errors.email && {error: true, helperText: errors.email.message})}
             />
@@ -169,10 +181,17 @@ const FeedbackDetails = () => {
                     value: true,
                     message: 'Number cannot be empty!'
                   },
+                  maxLength: {
+                    value: 255,
+                    message: "Number is too long"
+                  }
                 })}
                 {...(errors.number && {error: true, helperText: errors.number.message})}
             />
           </div>
+          <Typography className={classes.errorMessage}>
+            {feedbackDetailsError}
+          </Typography>
           <div>
             <label>
               <Button id="home" className={classes.button} variant="contained" color="primary"
@@ -216,23 +235,23 @@ const FeedbackDetails = () => {
                 <TableBody>{
                   feedbackDetails.map((feedbackInfoItem, index) => (
                       <StyledTableRow key={index}>
-                        <StyledTableCell align="left" component="th" scope="row">
+                        <StyledTableCell align="center" component="th" scope="row">
                           {index + 1}
                         </StyledTableCell>
-                        <StyledTableCell align="left" component="th" scope="row">
+                        <StyledTableCell align="center" component="th" scope="row">
                           {feedbackInfoItem.name}
                         </StyledTableCell>
                         <StyledTableCell
-                            align="left">{feedbackInfoItem.email}</StyledTableCell>
+                            align="center">{feedbackInfoItem.email}</StyledTableCell>
                         <StyledTableCell
-                            align="left">{
+                            align="center">{
                           '+'.concat(feedbackInfoItem.contactNumber.countryCode.toString()).concat(" ").concat(feedbackInfoItem.contactNumber.number)}</StyledTableCell>
                         <StyledTableCell
-                            align="left">{feedbackInfoItem.agency}</StyledTableCell>
+                            align="center">{feedbackInfoItem.agency}</StyledTableCell>
                         <StyledTableCell
-                            align="left">{feedbackInfoItem.text}</StyledTableCell>
+                            align="center">{feedbackInfoItem.text}</StyledTableCell>
                         <StyledTableCell
-                            align="left">{feedbackInfoItem.status}</StyledTableCell>
+                            align="center">{feedbackInfoItem.status}</StyledTableCell>
                       </StyledTableRow>))}
                 </TableBody>
               </Table>

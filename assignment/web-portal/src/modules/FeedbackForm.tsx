@@ -1,5 +1,5 @@
 import {Button, makeStyles, MenuItem, TextField, Typography} from "@material-ui/core";
-import React, {useEffect} from "react";
+import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import axios from "axios";
 import {GET_AGENCIES_URL, POST_FEEDBACKS_URL} from "../constants/apiUrl";
@@ -34,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
   paragraph: {
     marginBottom: theme.spacing(3)
   },
+  errorMessage: {
+    marginTop: theme.spacing(-3),
+    marginBottom: theme.spacing(3),
+    color: "red"
+  }
 }));
 
 const FeedbackForm = () => {
@@ -47,6 +52,7 @@ const FeedbackForm = () => {
   });
 
   const [agency, setAgency] = React.useState<LookupListApiItem>();
+  const [createFeedbackError, setFeedbackError] = useState("");
 
   const handleProcessFeedback = (data: CreateFeedbackFormData) => {
     createFeedbackMutation.mutate(data);
@@ -57,9 +63,16 @@ const FeedbackForm = () => {
     data: agencyData,
     isFetching: isAgencyDataFetching
   } = useQuery(GET_AGENCY_KEY, () =>
-      fetch(
+      axios.get(
           GET_AGENCIES_URL
-      ).then((res) => res.json())
+      ).then((res) => {
+        const lookupListApiItem: LookupListApiItem = {
+          "code": res.data[0].code,
+          "description": res.data[0].description
+        };
+        setAgency(lookupListApiItem);
+        return res.data;
+      })
   );
 
   const handleAgencyChange = (event: any) => {
@@ -85,24 +98,16 @@ const FeedbackForm = () => {
       "agencyUuid": agency?.code,
       "text": data.feedback
     }
-    await axios.post(POST_FEEDBACKS_URL, requestPayload).then((res) => {
+    await axios.post(POST_FEEDBACKS_URL, requestPayload).then(() => {
       queryClient.invalidateQueries(POST_FEEDBACKS_KEY);
       reset();
-      alert("Your feedback have been submitted. Do note that the processing would takes up to 5 minutes.")
+      setFeedbackError("");
+      alert("Your feedback have been submitted. Do note that the processing would takes up to 5 minutes.");
     }).catch(error => {
-      console.log(error);
+      setFeedbackError("Please check your inputs again.");
+      console.log(error.message)
     });
   }
-
-  useEffect(() => {
-    if (!isAgencyDataLoading) {
-      const lookupListApiItem: LookupListApiItem = {
-        "code": agencyData[0].code,
-        "description": agencyData[0].description
-      };
-      setAgency(lookupListApiItem);
-    }
-  }, []);
 
   if (isAgencyDataLoading || isAgencyDataFetching) {
     return <div> Loading... </div>
@@ -130,6 +135,10 @@ const FeedbackForm = () => {
                     value: true,
                     message: 'Name cannot be empty!'
                   },
+                  maxLength: {
+                    value: 255,
+                    message: "Name is too long"
+                  }
                 })}
                 {...(errors.name && {error: true, helperText: errors.name.message})}
             />
@@ -145,6 +154,10 @@ const FeedbackForm = () => {
                   required: {
                     value: true,
                     message: 'Email cannot be empty!'
+                  },
+                  maxLength: {
+                    value: 321,
+                    message: "Email is too long"
                   }
                 })}
                 {...(errors.email && {error: true, helperText: errors.email.message})}
@@ -183,6 +196,10 @@ const FeedbackForm = () => {
                     value: true,
                     message: 'Number cannot be empty!'
                   },
+                  maxLength: {
+                    value: 255,
+                    message: "Number is too long"
+                  }
                 })}
                 {...(errors.number && {error: true, helperText: errors.number.message})}
             />
@@ -226,6 +243,9 @@ const FeedbackForm = () => {
                 {...(errors.feedback && {error: true, helperText: errors.feedback.message})}
             />
           </div>
+          <Typography className={classes.errorMessage}>
+            {createFeedbackError}
+          </Typography>
           <div>
             <label>
               <Button id="home" className={classes.button} variant="contained" color="primary"
