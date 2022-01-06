@@ -1,5 +1,5 @@
 import {Button, makeStyles, MenuItem, TextField, Typography} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import axios from "axios";
 import {GET_AGENCIES_URL, POST_FEEDBACKS_URL} from "../constants/apiUrl";
@@ -63,9 +63,16 @@ const FeedbackForm = () => {
     data: agencyData,
     isFetching: isAgencyDataFetching
   } = useQuery(GET_AGENCY_KEY, () =>
-      fetch(
+      axios.get(
           GET_AGENCIES_URL
-      ).then((res) => res.json())
+      ).then((res) => {
+        const lookupListApiItem: LookupListApiItem = {
+          "code": res.data[0].code,
+          "description": res.data[0].description
+        };
+        setAgency(lookupListApiItem);
+        return res.data;
+      })
   );
 
   const handleAgencyChange = (event: any) => {
@@ -81,8 +88,6 @@ const FeedbackForm = () => {
       postCreateFeedback(data));
 
   const postCreateFeedback = async (data: CreateFeedbackFormData) => {
-    console.log("Test", data)
-    console.log("Test1", agency)
     const requestPayload = {
       "name": data.name,
       "email": data.email,
@@ -103,16 +108,6 @@ const FeedbackForm = () => {
       console.log(error.message)
     });
   }
-
-  useEffect(() => {
-    if (!isAgencyDataLoading) {
-      const lookupListApiItem: LookupListApiItem = {
-        "code": agencyData[0].code,
-        "description": agencyData[0].description
-      };
-      setAgency(lookupListApiItem);
-    }
-  }, []);
 
   if (isAgencyDataLoading || isAgencyDataFetching) {
     return <div> Loading... </div>
