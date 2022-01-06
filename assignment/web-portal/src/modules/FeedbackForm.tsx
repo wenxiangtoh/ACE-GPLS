@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paragraph: {
     marginBottom: theme.spacing(3)
-  }
+  },
 }));
 
 const FeedbackForm = () => {
@@ -136,16 +136,16 @@ const FeedbackForm = () => {
             <TextField
                 id="email"
                 className={classes.textField}
-                label="Email"
+                placeholder={"Email (Example: 123@gmail.com)"}
                 variant="outlined"
                 autoComplete="new"
-                type="text"
                 name="email"
+                type="text"
                 inputRef={register({
                   required: {
                     value: true,
                     message: 'Email cannot be empty!'
-                  },
+                  }
                 })}
                 {...(errors.email && {error: true, helperText: errors.email.message})}
             />
@@ -154,7 +154,7 @@ const FeedbackForm = () => {
             <TextField
                 id="countryCode"
                 className={classes.contactNumber}
-                label="Country Code"
+                placeholder={"Country Code (Example: 65)"}
                 variant="outlined"
                 autoComplete="on"
                 type="number"
@@ -206,7 +206,7 @@ const FeedbackForm = () => {
             <TextField
                 id="feedback"
                 className={classes.multiLine}
-                placeholder={"Enter your feedback..."}
+                placeholder={"Enter your feedback (limit to 2000 characters)"}
                 multiline
                 rows={6}
                 variant="outlined"
@@ -217,6 +217,10 @@ const FeedbackForm = () => {
                   required: {
                     value: true,
                     message: 'Feedback cannot be empty!'
+                  },
+                  maxLength: {
+                    value: 2000,
+                    message: "Do keep the feedback within 2000 characters."
                   },
                 })}
                 {...(errors.feedback && {error: true, helperText: errors.feedback.message})}

@@ -125,7 +125,7 @@ const FeedbackDetails = () => {
             <TextField
                 id="email"
                 className={classes.textField}
-                label="Email"
+                placeholder={"Email (Example: 123@gmail.com)"}
                 variant="outlined"
                 autoComplete="off"
                 type="text"
@@ -143,7 +143,7 @@ const FeedbackDetails = () => {
             <TextField
                 id="countryCode"
                 className={classes.contactNumber}
-                label="Country Code"
+                placeholder={"Country Code (Example: 65)"}
                 variant="outlined"
                 autoComplete="on"
                 type="number"

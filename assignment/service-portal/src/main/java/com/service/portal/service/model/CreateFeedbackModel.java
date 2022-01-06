@@ -2,6 +2,7 @@ package com.service.portal.service.model;
 
 import com.service.library.service.model.UserModel;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,5 +22,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class CreateFeedbackModel extends UserModel {
 
-  @NotBlank private String text;
+  @NotBlank
+  @Size(min = 1, max = 2000)
+  private String text;
 }
