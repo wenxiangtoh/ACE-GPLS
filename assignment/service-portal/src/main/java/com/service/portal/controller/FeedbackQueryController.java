@@ -4,6 +4,7 @@ import com.service.portal.service.FeedbackQueryService;
 import com.service.portal.service.model.FeedbackInfoModel;
 import com.service.portal.service.model.FeedbackInfoRequestModel;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +31,7 @@ public class FeedbackQueryController {
    */
   @PostMapping("/feedbacks/search")
   public ResponseEntity<List<FeedbackInfoModel>> findFeedbackByEmailAndContactNumber(
-      @RequestBody FeedbackInfoRequestModel feedbackInfoRequestModel) {
+      @Valid @RequestBody FeedbackInfoRequestModel feedbackInfoRequestModel) {
     return ResponseEntity.ok(
         feedbackQueryService.findFeedbacksByEmailAndContactNumber(feedbackInfoRequestModel));
   }
