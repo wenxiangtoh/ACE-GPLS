@@ -226,17 +226,6 @@ const FeedbackForm = () => {
           </Typography>
           <div>
             <label>
-              <Button id="home" className={classes.button} variant="contained" color="primary"
-                      component="span"
-                      onClick={() => {
-                        history.push('/');
-                      }}>
-                home
-              </Button>
-            </label>
-          </div>
-          <div>
-            <label>
               <Button
                   id="feedback-submit-button"
                   className={classes.button}
