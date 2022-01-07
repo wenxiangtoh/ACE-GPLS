@@ -54,7 +54,7 @@ export const useStyles = makeStyles((theme) => ({
   table: {
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(15),
-    width: '80%',
+    width: '80% !important',
   },
 }));
 
