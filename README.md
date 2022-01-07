@@ -1,7 +1,8 @@
 # ACE-GPLS
-A web-based application built using React and Java Programming Language.
+A web-based application built using React and Java Programming Language which utilizes Spring Boot Framework.
 
 This project involves allowing users to submit feedback, view their feedback details upon submission of feedback.
+The processing of the feedback would takes up to 5 minutes interval time.
 
 ## Installation Guide
 
@@ -40,10 +41,11 @@ Download and install mySQL [here](https://dev.mysql.com/downloads/mysql/).
 
 #### 2. Establish Database Connection
 
-Open a terminal and login to mySQL.
+Open a terminal and login to mySQL using your local database credentials.
 
 Run the following ddl commands stored within the following project directory in the corresponding order:
 
+```bash
 /misc/ddl/schema/service-portal/01-DATABASE/01-CREATE-SCHEMA.sql
 
 /misc/ddl/schema/service-portal/02-TABLE/01-AGENCIES.sql
@@ -57,17 +59,18 @@ Run the following ddl commands stored within the following project directory in 
 /misc/ddl/schema/service-portal/02-TABLE/04-FEEDBACKS.sql
 
 /misc/ddl/master/service-portal/01-AGENCIES.sql
+```
 
 Within your integrated development environment (IDE), open up the application.yml found within /service-portal/src/main/resources/application.yml 
 and edit the values reflected under 
 
  spring:
   datasource:
-    password: {yourlocalDBPassword}
-
+    password: **{yourlocalDBPassword}**
+    
 #### 4. Run development server
 
-Run PortalServiceApplication.java to start up the back-end service.
+Run **PortalServiceApplication.java** to start up the back-end service.
 
 ### Installation Instructions (Front-end)
 
