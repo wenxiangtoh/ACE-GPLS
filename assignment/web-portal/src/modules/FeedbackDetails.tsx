@@ -14,7 +14,12 @@ import {POST_FEEDBACK_INFO_URL} from "../constants/apiUrl";
 import {FeedbackInfoItem, FeedbackInfoRequest} from "../models/Feedback";
 import {useForm} from "react-hook-form";
 import {useMutation, useQueryClient} from "react-query";
-import {StyledTableCell, StyledTableRow, useStyles} from "../constants/styles";
+import {
+  StyledFeedbackTableCell,
+  StyledTableCell,
+  StyledTableRow,
+  useStyles
+} from "../constants/styles";
 
 const FeedbackDetails = () => {
   const classes = useStyles();
@@ -202,8 +207,8 @@ const FeedbackDetails = () => {
                           '+'.concat(feedbackInfoItem.contactNumber.countryCode.toString()).concat(" ").concat(feedbackInfoItem.contactNumber.number)}</StyledTableCell>
                         <StyledTableCell
                             align="center">{feedbackInfoItem.agency}</StyledTableCell>
-                        <StyledTableCell
-                            align="center">{feedbackInfoItem.text}</StyledTableCell>
+                        <StyledFeedbackTableCell
+                            align="center">{feedbackInfoItem.text}</StyledFeedbackTableCell>
                         <StyledTableCell
                             align="center">{feedbackInfoItem.status}</StyledTableCell>
                       </StyledTableRow>))}
