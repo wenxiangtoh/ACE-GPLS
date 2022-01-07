@@ -1,70 +1,20 @@
 import {
   Button,
-  makeStyles,
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableRow,
   TextField,
-  Typography,
-  withStyles
+  Typography
 } from "@material-ui/core";
 import React, {useState} from "react";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import axios from "axios";
 import {POST_FEEDBACK_INFO_URL} from "../constants/apiUrl";
 import {FeedbackInfoItem, FeedbackInfoRequest} from "../models/Feedback";
 import {useForm} from "react-hook-form";
 import {useMutation, useQueryClient} from "react-query";
-
-const useStyles = makeStyles((theme) => ({
-  title: {
-    marginBottom: theme.spacing(3)
-  },
-  button: {
-    marginBottom: theme.spacing(3),
-    width: '15%',
-  },
-  textField: {
-    marginLeft: theme.spacing(3),
-    marginRight: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-    width: '50%',
-  },
-  contactNumber: {
-    marginBottom: theme.spacing(3),
-    width: '25%',
-  },
-  table: {
-    marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(15),
-    width: '80%',
-  },
-  errorMessage: {
-    marginTop: theme.spacing(-3),
-    marginBottom: theme.spacing(3),
-    color: "red"
-  }
-}));
-
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
-
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
-}))(TableRow);
+import {StyledTableCell, StyledTableRow, useStyles} from "../constants/styles";
 
 const FeedbackDetails = () => {
   const classes = useStyles();
@@ -122,6 +72,16 @@ const FeedbackDetails = () => {
       <form onSubmit={handleSubmit(handleSubmitFeedbackDetails)} autoComplete="off">
         <div>
           <div>
+            <nav className={classes.nav}>
+              <ul className={classes.navLink}>
+                <Link className={classes.navStyle} to="/">
+                  <li> Home</li>
+                </Link>
+                <Link className={classes.navStyle} to="/feedbacks">
+                  <li> Submit Feedbacks</li>
+                </Link>
+              </ul>
+            </nav>
             <Typography
                 className={classes.title}
                 variant="h3"

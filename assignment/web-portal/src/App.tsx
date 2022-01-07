@@ -18,9 +18,7 @@ function App() {
                 <Home/>
               </Route>
               <Route path='/feedbacks/view-feedback-status'>
-
                 <FeedbackInfo/>
-
               </Route>
               <Route path='/feedbacks'>
                 <Feedback/>
