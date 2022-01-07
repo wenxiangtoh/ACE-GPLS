@@ -1,45 +1,13 @@
-import {Button, makeStyles, MenuItem, TextField, Typography} from "@material-ui/core";
+import {Button, MenuItem, TextField, Typography} from "@material-ui/core";
 import React, {useState} from "react";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import axios from "axios";
 import {GET_AGENCIES_URL, POST_FEEDBACKS_URL} from "../constants/apiUrl";
 import {CreateFeedbackFormData, LookupListApiItem} from "../models/Feedback";
 import {useForm} from "react-hook-form";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {GET_AGENCY_KEY, POST_FEEDBACKS_KEY} from "../constants/apiKey";
-
-const useStyles = makeStyles((theme) => ({
-  title: {
-    marginBottom: theme.spacing(3)
-  },
-  button: {
-    marginBottom: theme.spacing(3),
-    width: '15%',
-  },
-  textField: {
-    marginLeft: theme.spacing(3),
-    marginRight: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-    textAlign: "left",
-    width: '50%',
-  },
-  contactNumber: {
-    marginBottom: theme.spacing(3),
-    width: '25%',
-  },
-  multiLine: {
-    marginBottom: theme.spacing(3),
-    width: '50%'
-  },
-  paragraph: {
-    marginBottom: theme.spacing(3)
-  },
-  errorMessage: {
-    marginTop: theme.spacing(-3),
-    marginBottom: theme.spacing(3),
-    color: "red"
-  }
-}));
+import {useStyles} from "../constants/styles";
 
 const FeedbackForm = () => {
   const classes = useStyles();
@@ -115,6 +83,16 @@ const FeedbackForm = () => {
   return (
       <form onSubmit={handleSubmit(handleProcessFeedback)} autoComplete="off">
         <div>
+          <nav className={classes.nav}>
+            <ul className={classes.navLink}>
+              <Link className={classes.navStyle} to="/">
+                <li> Home</li>
+              </Link>
+              <Link className={classes.navStyle} to="/feedbacks/view-feedback-status">
+                <li> Check Feedback Status</li>
+              </Link>
+            </ul>
+          </nav>
           <Typography
               className={classes.title}
               variant="h3"
