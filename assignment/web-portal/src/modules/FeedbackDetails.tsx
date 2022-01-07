@@ -38,21 +38,15 @@ const FeedbackDetails = () => {
       postGetFeedbackDetails(data));
 
   const postGetFeedbackDetails = async (data: FeedbackInfoRequest) => {
-    await axios({
-      method: 'POST',
-      url: POST_FEEDBACK_INFO_URL,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*',
+    const requestPayload = {
+      "email": data.email,
+      "contactNumber": {
+        "countryCode": data.countryCode,
+        "number": data.number
       },
-      data: {
-        "email": data.email,
-        "contactNumber": {
-          "countryCode": data.countryCode,
-          "number": data.number
-        },
-      },
-    }).then((res) => {
+    }
+
+    await axios.post(POST_FEEDBACK_INFO_URL, requestPayload).then((res) => {
       queryClient.invalidateQueries(POST_FEEDBACK_INFO_URL);
       setFeedbackDetails(res.data);
       setIsLoading(false);
