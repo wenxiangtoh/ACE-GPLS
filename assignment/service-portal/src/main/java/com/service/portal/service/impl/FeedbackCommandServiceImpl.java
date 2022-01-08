@@ -65,7 +65,7 @@ public class FeedbackCommandServiceImpl implements FeedbackCommandService {
       userInfoModel = userQueryService.findUserByNameAndEmail(searchUserModel);
       userId = userInfoModel.getId();
     }
-    var description = createFeedbackModel.getText();
+    var description = createFeedbackModel.getText().replaceAll("\\p{Cntrl}&&[^\r\n\t]", " ");
     var feedback = FeedbackConverter.convertFrom(userId, description, FeedbackStatus.PROCESSING);
 
     feedbackRepository.save(feedback);
