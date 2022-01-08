@@ -49,18 +49,22 @@ public class FeedbackQueryServiceImpl implements FeedbackQueryService {
     if (feedbacks.isEmpty()) {
       return new ArrayList<>();
     }
-    var userId = feedbacks.get(0).getUserId();
-    var user = checkUserExistsById(userId, email, countryCode, number);
-
     var feedbackInfoModelMap = constructFeedbackInfoModelMap(feedbacks, contactNumber);
-    var feedbackInfoModels = feedbackInfoModelMap.get(userId);
 
-    for (FeedbackInfoModel feedbackInfoModel : feedbackInfoModels) {
-      feedbackInfoModel.setName(user.getName());
-      feedbackInfoModel.setEmail(user.getEmail());
-      feedbackInfoModel.setAgency(user.getAgency().getName());
+    List<FeedbackInfoModel> result = new ArrayList<>(feedbackInfoModelMap.size());
+    for (Map.Entry<Long, List<FeedbackInfoModel>> entry : feedbackInfoModelMap.entrySet()) {
+      Long userId = entry.getKey();
+      var user = checkUserExistsById(userId, email, countryCode, number);
+      var feedbackInfoModels = feedbackInfoModelMap.get(userId);
+
+      for (FeedbackInfoModel feedbackInfoModel : feedbackInfoModels) {
+        feedbackInfoModel.setName(user.getName());
+        feedbackInfoModel.setEmail(user.getEmail());
+        feedbackInfoModel.setAgency(user.getAgency().getName());
+        result.add(feedbackInfoModel);
+      }
     }
-    return feedbackInfoModels;
+    return result;
   }
 
   private User checkUserExistsById(long userId, String email, Long countryCode, String number) {
@@ -74,7 +78,7 @@ public class FeedbackQueryServiceImpl implements FeedbackQueryService {
 
   private Map<Long, List<FeedbackInfoModel>> constructFeedbackInfoModelMap(
       List<Feedback> feedbacks, ContactNumberModel contactNumber) {
-    Map<Long, List<FeedbackInfoModel>> feedbackInfoModelMap = new HashMap<>();
+    Map<Long, List<FeedbackInfoModel>> feedbackInfoModelMap = new HashMap<>(feedbacks.size());
 
     for (Feedback feedback : feedbacks) {
       var feedbackInfoModel = new FeedbackInfoModel();
