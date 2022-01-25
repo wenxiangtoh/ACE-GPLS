@@ -12,17 +12,6 @@ export interface ContactNumberItem {
   number: string;
 }
 
-export interface ListItem {
-  key: string;
-  value: string;
-}
-
-// export interface ListItem {
-//   children: string;
-//   key: string;
-//   value: string;
-// }
-
 export interface LookupListApiItem extends Record<string, string> {
   code: string;
   description: string;
