@@ -8,7 +8,7 @@ import {
   Typography
 } from "@material-ui/core";
 import React, {useState} from "react";
-import {Link, useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 import axios from "axios";
 import {POST_FEEDBACK_INFO_URL} from "../constants/apiUrl";
 import {FeedbackInfoItem, FeedbackInfoRequest} from "../models/Feedback";
@@ -23,7 +23,6 @@ import {
 
 const FeedbackDetails = () => {
   const classes = useStyles();
-  const history = useHistory();
   const queryClient = useQueryClient();
 
   const {register, errors, handleSubmit} = useForm({

@@ -1,6 +1,6 @@
 import {Button, MenuItem, TextField, Typography} from "@material-ui/core";
 import React, {useState} from "react";
-import {Link, useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 import axios from "axios";
 import {GET_AGENCIES_URL, POST_FEEDBACKS_URL} from "../constants/apiUrl";
 import {CreateFeedbackFormData, LookupListApiItem} from "../models/Feedback";
@@ -11,7 +11,6 @@ import {useStyles} from "../constants/styles";
 
 const FeedbackForm = () => {
   const classes = useStyles();
-  const history = useHistory();
   const queryClient = useQueryClient();
 
   const {register, errors, handleSubmit, reset} = useForm({
